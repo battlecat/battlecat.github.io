@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html class="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script type="text/javascript" src="../js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../js/util/utilStr.js"></script>
+    <script type="text/javascript" src="../js/util/util.js"></script>
+    <script type="text/javascript" src="../js/util/json2.js"></script>
+    <script type="text/javascript" src="../js/util/form.js"></script>
+    <script type="text/javascript" src="../js/util/dialog.js"></script>
+    <script type="text/javascript" src="../js/calendar/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/jquery/plugins/jquery.htselect.js"></script>
+    <script type="text/javascript" src="../js/jquery/plugins/jquery.rowOps.js"></script>
+    <script type="text/javascript" src="../js/deelon/foldBox.js" ></script>
+    <script type="text/javascript" src="../js/deelon/absoulteInTop.js" ></script>
+    <script type="text/javascript" src="../js/tree/jquery.ztree.js"></script>
+    <script type="text/javascript" src="../js/deelon/platform/desktop/desktopManage.js"></script>
+    <script type="text/javascript" src="../js/deelon/platform/tabOperator.js"></script>
+    <script type="text/javascript" src="../js/deelon/platform/system/SysDialog.js"></script>
+    <script type="text/javascript" src="../js/deelon/crmform/customer/customerDialog.js"></script>
+    <script type="text/javascript" src="../js/deelon/platform/bpm/FlowUtil.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <script type="text/javascript">
+        window.onload = function() {
+            //初始化个人信息
+            getCustomerInfo();
+        };
+
+        //获取个人信息
+        function getCustomerInfo(){
+            var customerId = $("#customerId").val();
+            var _url = __ctx+"/mobile/crmCustomerPersonInfoController/getCustomerInfo.ht";
+            var _params = {
+                "customerId" : '10000025310012'
+            };
+            var data = getAjax({
+                url : _url,
+                data : _params,
+                dataType : 'json',
+                error : function(_xhr, _text_status, _error_thrown) {
+                }
+            });
+            //debugger;
+            if (data.code == '0') {
+
+                var personalInfoArry = eval('(' + data.personalInfoArry + ')');
+
+                //自动填充个人基本信息
+                fillInfo(personalInfoArry);
+            }
+            if (data.code == '1') {
+                jAlert.info(data.result);
+                //location.href = "../index.jsp";
+            }
+        }
+
+        //填充个信息
+        function fillInfo(personalInfoArry){
+            var customerId=personalInfoArry[0].customerId;
+            var customerName=personalInfoArry[0].customerName;
+            var personIdentityCard=personalInfoArry[0].personIdentityCard;
+            var personPassport=personalInfoArry[0].personPassport;
+            var personSex=personalInfoArry[0].personSex;
+            var personMarital=personalInfoArry[0].personMarital;
+            var personExistChild=personalInfoArry[0].personExistChild;
+            var personCompanyName=personalInfoArry[0].personCompanyName;
+            var personCompanyPost=personalInfoArry[0].personCompanyPost;
+            var personYearIncome=personalInfoArry[0].personYearIncome;
+            var personSocialSecurityTime=personalInfoArry[0].personSocialSecurityTime;
+            var personDwellAddr=personalInfoArry[0].personDwellAddr;
+            var personMobile=personalInfoArry[0].personMobile;
+            var personalPropertyOwner=personalInfoArry[0].personalPropertyOwner;
+            var personalPropertyOwnershipNumber=personalInfoArry[0].personalPropertyOwnershipNumber;
+            var linkmanName=personalInfoArry[0].linkmanName;
+            var linkmanMobile=personalInfoArry[0].linkmanMobile;
+            $("#customerId").val(customerId);
+            $("#customerName").val(customerName);
+            $("#personIdentityCard").val(personIdentityCard);
+            $("#personPassport").val(personPassport);
+            //性别
+            $("input[name=personSex][value="+personSex+"]").attr("checked",true);
+            //婚姻状态
+            $("input[name=personMarital][value="+personMarital+"]").attr("checked",true);
+            //是否有孩子
+            $("input[name=personExistChild][value="+personExistChild+"]").attr("checked",true);
+            $("#personCompanyName").val(personCompanyName);
+            $("#personCompanyPost").val(personCompanyPost);
+            $("#personYearIncome").val(personYearIncome);
+            $("#personSocialSecurityTime").val(personSocialSecurityTime);
+            $("#personDwellAddr").val(personDwellAddr);
+            $("#personMobile").val(personMobile);
+            $("#personalPropertyOwner").val(personalPropertyOwner);
+            $("#personalPropertyOwnershipNumber").val(personalPropertyOwnershipNumber);
+            $("#linkmanName").val(linkmanName);
+            $("#linkmanMobile").val(linkmanMobile);
+        }
+
+        /** 保存个人信息 */
+        function savePersonalInfo() {
+            var customerId=$("#customerId").val();
+            var customerName=$("#customerName").val();
+            var personIdentityCard=$("#personIdentityCard").val();
+            var personPassport=$("#personPassport").val();
+            var personSex=$("input[name='personSex']:checked").val();
+            var personMarital=$("input[name='personMarital']:checked").val();
+            var personExistChild=$("input[name='personExistChild']:checked").val();
+            var personCompanyName=$("#personCompanyName").val();
+            var personCompanyPost=$("#personCompanyPost").val();
+            var personYearIncome=$("#personYearIncome").val();
+            var personSocialSecurityTime=$("#personSocialSecurityTime").val();
+            var personDwellAddr=$("#personDwellAddr").val();
+            var personMobile=$("#personMobile").val();
+            var personalPropertyOwner=$("#personalPropertyOwner").val();
+            var personalPropertyOwnershipNumber=$("#personalPropertyOwnershipNumber").val();
+            var linkmanName=$("#linkmanName").val();
+            var linkmanMobile=$("#linkmanMobile").val();
+
+            var _url = __ctx+"/mobile/crmCustomerPersonInfoController/saveAndUpdatePersonalInfo.ht";
+            var _params = {
+                "customerId":customerId,
+                "customerName":customerName,
+                "personIdentityCard":personIdentityCard,
+                "personPassport":personPassport,
+                "personSex":personSex,
+                "personMarital":personMarital,
+                "personExistChild":personExistChild,
+                "personCompanyName":personCompanyName,
+                "personCompanyPost":personCompanyPost,
+                "personYearIncome":personYearIncome,
+                "personSocialSecurityTime":personSocialSecurityTime,
+                "personDwellAddr":personDwellAddr,
+                "personMobile":personMobile,
+                "personalPropertyOwner":personalPropertyOwner,
+                "personalPropertyOwnershipNumber":personalPropertyOwnershipNumber,
+                "linkmanName":linkmanName,
+                "linkmanMobile":linkmanMobile
+            };
+            var data = getAjax({
+                url : _url,
+                data : _params,
+                dataType : 'json',
+                error : function(_xhr, _text_status, _error_thrown) {
+                }
+            });
+
+            if (data.code == '1') {
+                jAlert.info(data.result);
+            }
+            if (data.code == '0') {
+                jAlert.success(data.result);
+            }
+
+        }
+    </script>
+</head>
+<body>
+<div class="logo toCommon">
+    <h1 class="logoLeft fl"><a href='index.html'><img src="../styles/mobile/images/logo.png" title="广州优贷" alt="广州优贷"></a></h1>
+    <div class="logoRight fr">
+        <p class="fl contact">400-888-888</p>
+        <a class="fl" href="javascript:;" title="登录">登录</a><span class="fl">|</span><a class="fl" href="javascript:;" title="注册">注册</a>
+    </div>
+</div>
+<div class="banner"></div>
+
+<div class="info_main toCommon">
+    <ul class="nav_list">
+        <li><a class="ico-home" href="index.html" title="首页"><em></em><i>首页</i></a></li>
+        <li><a class="ico-wydk" href="loan_form.html" title="我要贷款"><em></em><i>我要贷款</i></a></li>
+        <li><a class="ico-wddk" href="loan_list.html" title="我的贷款"><em></em><i>我的贷款</i></a></li>
+        <li class="current"><a class="ico-grxx" href="personal.html" title="个人信息"><em></em><i>个人信息</i></a></li>
+        <li><a class="ico-qyxx" href="company.html" title="企业信息"><em ></em><i>企业信息</i></a></li>
+        <li><a class="ico-yhkxx" href="bank.html" title="银行卡信息"><em></em><i>银行卡信息</i></a></li>
+        <li><a class="ico-sczlfj" href="upload.html" title="上传资料附件"><em></em><i>上传资料附件</i></a></li>
+        <li><a class="ico-xgmm" href="reset_pwd.html" title="修改密码"><em></em><i>修改密码</i></a></li>
+    </ul>
+
+</div>
+<div class="infomain_box toCommon">
+    <div class="info_header_box"></div>
+    <div class="info_main_box">
+
+        <div class="info_personal">
+
+            <h3 class="tab_title text-center">个人信息确认</h3>
+            <div class="write_main">
+                <form id="customerInfoForm" method="post" action="queryCustomerInfo.ht">
+                    <p><label>真实姓名：</label><input type='text' maxlength="10" id="customerName" name="customerName" value="" validate="{required:true}" placeholder="请输入真实姓名"/><font color="red">&nbsp;&nbsp;*</font></p>
+                    <input type='hidden' maxlength="10" id="customerId" name = "customerId" value="" />
+                    <p><label>身份证号码：</label><input type='text' maxlength="" id="personIdentityCard" name="personIdentityCard" value=""  validate="{required:true,digits:true}" placeholder="请输入身份证号码"/><font color="red">&nbsp;&nbsp;*</font></p>
+                    <p><label>护照号码：</label><input type='text' maxlength="" id="personPassport" name="personPassport" value=""  placeholder="请输入护照号码"/></p>
+                    <p class="check_type">
+                        <label>性别：</label>
+                        <input type="radio" style = "width:25px"  name="personSex" id="personSex" value="01"  /><span >&nbsp;&nbsp;&nbsp;男&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <input type="radio" style = "width:25px"  name="personSex" id="personSex"  value="02"   /><span >&nbsp;&nbsp;&nbsp;女&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">&nbsp;&nbsp;*</font>
+                    </p>
+                    <p class="check_type">
+                        <label>婚姻状态：</label>
+                        <!-- <label class="current check"><i class="ico fl"></i><span class="fl" id="" name="">已婚</span></label>
+                      <label class="check"><i class="ico fl"></i><span class="fl" id="" name="">未婚</span></label>
+                      <label class="check"><i class="ico fl"></i><span class="fl" id="" name="">离异</span></label> -->
+                        <input type="radio" style = "width:25px"  validate="{required:true}" name="personMarital" id="personMarital" value="02"   /><span >&nbsp;&nbsp;&nbsp;已婚&nbsp;&nbsp;&nbsp;</span>
+                        <input type="radio" style = "width:25px"  validate="{required:true}" name="personMarital" id="personMarital"  value="01"  /><span >&nbsp;&nbsp;&nbsp;未婚&nbsp;&nbsp;&nbsp;</span>
+                        <input type="radio" style = "width:25px"  validate="{required:true}" name="personMarital" id="personMarital"  value="03"  /><span >&nbsp;&nbsp;&nbsp;离异&nbsp;&nbsp;&nbsp;</span><font color="red">&nbsp;&nbsp;*</font>
+                    </p>
+                    <p class="check_type">
+                        <label>是否有子女：</label>
+                        <input type="radio" style = "width:25px" validate="{required:true}" name="personExistChild" id="personExistChild" value="0"    /><span >&nbsp;&nbsp;&nbsp;否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <input type="radio" style = "width:25px" validate="{required:true}" name="personExistChild" id="personExistChild"  value="1"   /><span >&nbsp;&nbsp;&nbsp;是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">&nbsp;&nbsp;*</font>
+                    </p>
+                    <p><label>工作单位：</label><input type='text' maxlength="" id="personCompanyName" validate="{required:true}" name="personCompanyName" value="" placeholder="请输入工作单位"/><font color="red">&nbsp;&nbsp;*</font></p>
+                    <p><label>职务：</label><input type='text' maxlength="" id="personCompanyPost" name="personCompanyPost"  value="" placeholder="请输入职务"/></p>
+                    <p><label>个人年收入金额：</label><input type='text' maxlength="" id="personYearIncome" validate="{required:true,number:true}" name="personYearIncome" value="" placeholder="请输入个人年收入金额"/><font color="red">&nbsp;&nbsp;*</font></p>
+                    <p><label>已缴社保年限：</label><input type='text' maxlength="" id="personSocialSecurityTime" validate="{required:true,number:true}" name="personSocialSecurityTime" value="" placeholder="请输入已缴社保年限"/><font color="red">&nbsp;&nbsp;*</font></p>
+                    <p><label>房产证产权人：</label><input type='text' maxlength="" id="personalPropertyOwner" name="personalPropertyOwner" value="" placeholder="请输入房产证产权人"/></p>
+                    <p><label>房产证书编号：</label><input type='text' maxlength="" id="personalPropertyOwnershipNumber" name="personalPropertyOwnershipNumber" value="" placeholder="请输入房产证书编号"/></p>
+                    <p><label>家庭现住址：</label><input type='text' maxlength="" id="personDwellAddr" validate="{required:true}" name="personDwellAddr" value="" placeholder="请输入家庭现住址"/><font color="red">&nbsp;&nbsp;*</font></p>
+                    <p><label>借款人电话：</label><input type='text' maxlength="" id="personMobile" name="personMobile" value="" placeholder="请输入借款人电话"/></p>
+                    <p><label>其他联系人姓名：</label><input type='text' maxlength="" id="linkmanName" name="linkmanName"  value="" placeholder="请输入其他联系人姓名"/></p>
+                    <p><label>其他联系人电话：</label><input type='text' maxlength="" id="linkmanMobile" name="linkmanMobile" value="" placeholder="请输入其他联系人电话"/></p>
+
+                </form>
+                <p>
+                    <button type="button" id="dataFormSave" onclick="savePersonalInfo();" class="btn btn_orange_big personal_next">保存</button>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="info_footer_box"></div>
+</div>
+
+<p class="copyRight">Copyright @ 2016 YOUDAI  CO.LTD.粤ICP备66522122号</p>
+</body>
+
+
+</html>
