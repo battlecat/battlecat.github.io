@@ -1,192 +1,116 @@
-# mere-blog-theme
+# The Architect theme
 
-[![Gem Version](https://badge.fury.io/rb/mere-blog-theme.svg)](https://badge.fury.io/rb/mere-blog-theme)
-![Gem](https://img.shields.io/gem/dt/mere-blog-theme)
+[![.github/workflows/ci.yaml](https://github.com/pages-themes/architect/actions/workflows/ci.yaml/badge.svg)](https://github.com/pages-themes/architect/actions/workflows/ci.yaml) [![Gem Version](https://badge.fury.io/rb/jekyll-theme-architect.svg)](https://badge.fury.io/rb/jekyll-theme-architect)
 
-Mere is a minimal and simple blog theme, and nothing more, for use with Jekyll and GitHub Pages. It has been built with the Bulma frontend framework.
+*Architect is a Jekyll theme for GitHub Pages. You can [preview the theme to see what it looks like](http://pages-themes.github.io/architect), or even [use it today](#usage).*
 
-It has a homepage which displays the latest 6 posts and a paginated blog page used to list out all blog posts.
-
-**Mere Blog Theme uses Jekyll 4.3 for compatibility with Bulma v1**
-
-## Installation
-
-Add this line to your Jekyll site's `Gemfile`:
-
-```ruby
-gem "mere-blog-theme"
-```
-
-And add this line to your Jekyll site's `_config.yml`:
-
-```yaml
-theme: mere-blog-theme
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install mere-blog-theme
-
-## Upgrading to v1
-
-Version 1 of mere-blog-theme uses version 1 of Bulma. Bulma v1 has been updated to use dart sass and Jekyll was updated to use dart sass from version 4.3 and up, so this is now the minimum supported version of Jekyll for this theme.
-
-The standard build for GitHub pages only works with Jekyll 3.9, so you will need to migrate to using a GitHub action to build and deploy your site.
-
-Please read through the [Jekyll docs for GitHub Actions](https://jekyllrb.com/docs/continuous-integration/github-actions/) for more information.
+![Thumbnail of Architect](thumbnail.png)
 
 ## Usage
 
-- [Blog Setup](#blog-setup)
-- [Posts](#posts)
-  - [Post Intro](#post-intro)
-- [Homepage](#homepage)
-- [Authors](#authors)
-- [Google Analytics](#google-analytics)
-- [Themes](#themes)
+To use the Architect theme:
 
-### Blog Setup
+1. Add the following to your site's `_config.yml`:
 
-As of 0.4, the blog posts will be displayed on the homepage including pagination, instead of in a separate blog page.
+    ```yml
+    remote_theme: pages-themes/architect@v0.2.0
+    plugins:
+    - jekyll-remote-theme # add this line to the plugins list if you already have one
+    ```
 
-**The homepage page needs to be called index.html for the blog pagination**
+2. Optionally, if you'd like to preview your site on your computer, add the following to your site's `Gemfile`:
 
-Set the paginator up in the `_config.yml` file with the posts per page and the path to the blog.
+    ```ruby
+    gem "github-pages", group: :jekyll_plugins
+    ```
 
-```yaml
-paginate: 6
-paginate_path: "/page:num"
+## Customizing
+
+### Configuration variables
+
+Architect will respect the following variables, if set in your site's `_config.yml`:
+
+```yml
+title: [The title of your site]
+description: [A short description of your site's purpose]
 ```
 
-### Posts
+Additionally, you may choose to set the following optional variables:
 
-Posts should be created in the `_posts` directory as per standard Jekyll usage. The front matter should contain the layout of post, the image to use in the header and the homepage / blog page, the title of the post and the author of the post. You can also set a subtitle for the post if you want to.
-
-```yaml
-layout: post
-title: First Post
-image: /img/home.jpg
-author: C.S. Rhymes
+```yml
+show_downloads: ["true" or "false" (unquoted) to indicate whether to provide a download URL]
+google_analytics: [Your Google Analytics tracking ID]
 ```
 
-Wide images will work best, with a minimum width of 1400px.
+### Stylesheet
 
-#### Post Intro
+If you'd like to add your own custom styles:
 
-Version 0.3 allows you to provide a intro and an intro image in your frontmatter. When creating your post add a short `intro` text an `intro_image` as a path to an image and then specify the `intro_image_ratio` which should be a [Bulma image](https://bulma.io/documentation/elements/image/) class.
+1. Create a file called `/assets/css/style.scss` in your site
+2. Add the following content to the top of the file, exactly as shown:
+    ```scss
+    ---
+    ---
 
-```yaml
-layout: post
-title: Post with Intro
-author: Guest Author
-intro: This is the introduction text for this post. It appears large and bold at the top of the post
-intro_image: /img/home.jpg
-intro_image_ratio: is-16by9
-```
+    @import "{{ site.theme }}";
+    ```
+3. Add any custom CSS (or Sass, including imports) you'd like immediately after the `@import` line
 
-Only the intro is required if you want to display it. If you don't want an image then don't specify one and just the intro text will display.
+*Note: If you'd like to change the theme's Sass variables, you must set new values before the `@import` line in your stylesheet.*
 
-### Homepage
+### Layouts
 
-Finally, configure the homepage by creating an `index.html` page and configure the frontmatter with the layout of homepage, the title, subtitle (optional) and the image. You can set the hero_height to is-large if you want to make the homepage header a bit larger.
+If you'd like to change the theme's HTML layout:
 
-```yaml
-layout: homepage
-title: Mere Blog Theme
-subtitle: This is the demo site for the Mere Blog Theme
-image: /img/home.jpg
-hero_height: is-large
-```
+1. For some changes such as a custom `favicon`, you can add custom files in your local `_includes` folder. The files [provided with the theme](https://github.com/pages-themes/architect/tree/master/_includes) provide a starting point and are included by the [original layout template](https://github.com/pages-themes/architect/blob/master/_layouts/default.html).
+2. For more extensive changes, [copy the original template](https://github.com/pages-themes/architect/blob/master/_layouts/default.html) from the theme's repository<br />(*Pro-tip: click "raw" to make copying easier*)
+3. Create a file called `/_layouts/default.html` in your site
+4. Paste the default layout content copied in the first step
+5. Customize the layout as you'd like
 
-### Authors
+### Customizing Google Analytics code
 
-To enable the authors section, create a directory named `_authors` and create a page for each author within it. The author pages should have front matter in the following format.
+Google has released several iterations to their Google Analytics code over the years since this theme was first created. If you would like to take advantage of the latest code, paste it into `_includes/head-custom-google-analytics.html` in your Jekyll site.
 
-**NOTE** The author name should match the author name in their posts exactly.
+### Overriding GitHub-generated URLs
 
-```yaml
-layout: author
-title: The authors page title
-name: Author Name
-position: Web Designer
-description: The short description of the author
-avatar: /img/avatar.png
-website: https://www.csrhymes.com
-```
+Templates often rely on URLs supplied by GitHub such as links to your repository or links to download your project. If you'd like to override one or more default URLs:
 
-The website and avatar are optional, but if you are stuck for author images, why not try [https://getavataaars.com](https://getavataaars.com). Square images work best. You can then write about the author in the page content.
+1. Look at [the template source](https://github.com/pages-themes/architect/blob/master/_layouts/default.html) to determine the name of the variable. It will be in the form of `{{ site.github.zip_url }}`.
+2. Specify the URL that you'd like the template to use in your site's `_config.yml`. For example, if the variable was `site.github.url`, you'd add the following:
+    ```yml
+    github:
+      zip_url: http://example.com/download.zip
+      another_url: another value
+    ```
+3. When your site is built, Jekyll will use the URL you specified, rather than the default one provided by GitHub.
 
-Next, create an `authors.md` page in the root of your site and set the layout to authors.
+*Note: You must remove the `site.` prefix, and each variable name (after the `github.`) should be indent with two space below `github:`.*
 
-```yaml
-layout: authors
-title: Authors
-description: The authors page
-```
+For more information, see [the Jekyll variables documentation](https://jekyllrb.com/docs/variables/).
 
-Add authors as a collection in your `_config.yml` file with output set to true so the pages are generated.
+## Roadmap
 
-```yaml
-collections:
-  authors:
-    output: true
-```
+See the [open issues](https://github.com/pages-themes/architect/issues) for a list of proposed features (and known issues).
 
-When you build your site, the authors link will appear in the navbar. The authors page will display the authors you have added. You can then click on their name or image to view the author page, along with a list of their 4 latest posts.
+## Project philosophy
 
-There will also be a link back to the authors page at the bottom of the post.
-
-#### Author Social Profiles
-
-**New in 0.2.1 **
-
-You can add links to an author's social profile pages by adding the profile name and link to the front matter in the author's page (such as `_authors/chris.md`). The below social profiles are available.
-
-```yaml
-facebook: https://www.facebook.com/
-twitter: https://www.twitter.com/
-github: https://www.github.com/
-gitlab: https://www.gitlab.com
-instagram: https://www.instagram.com
-linkedin: https://www.linkedin.com/
-medium: https://www.medium.com/
-stack_overflow: https://stackoverflow.com/
-```
-
-### Google Analytics
-
-To enable Google Analytics add `google_analytics: UA-xxxxxxxx` to your `_config.yml` replacing the UA-xxxxxxxx with your Google Analytics property.
-
-### Themes
-
-Bulma v1 has a concept of themes and [automatic dark mode](https://bulma.io/documentation/features/dark-mode/).
-
-> Modern browsers come with a way to detect if a user has set their theme preference to light or dark by using the prefers-color-scheme keyword.
-
-To disable this behaviour and force a theme, set the `force_theme:` in the \_config.yml to either 'dark' or 'light'.
-
-```yaml
-# _config.yml
-force_theme: light
-```
+The Architect theme is intended to make it quick and easy for GitHub Pages users to create their first (or 100th) website. The theme should meet the vast majority of users' needs out of the box, erring on the side of simplicity rather than flexibility, and provide users the opportunity to opt-in to additional complexity if they have specific needs or wish to further customize their experience (such as adding custom CSS or modifying the default layout). It should also look great, but that goes without saying.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/chrisrhymes/mere-blog-theme. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Interested in contributing to Architect? We'd love your help. Architect is an open source project, built one contribution at a time by users like you. See [the CONTRIBUTING file](docs/CONTRIBUTING.md) for instructions on how to contribute.
 
-## Development
+### Previewing the theme locally
 
-To set up your environment to develop this theme, run `bundle install`.
+If you'd like to preview the theme locally (for example, in the process of proposing a change):
 
-Your theme is setup just like a normal Jekyll site! To test your theme, run `bundle exec jekyll serve` and open your browser at `http://localhost:4000`. This starts a Jekyll server using your theme. Add pages, documents, data, etc. like normal to test your theme's contents. As you make modifications to your theme and to your content, your site will regenerate and you should see the changes in the browser after a refresh, just like normal.
+1. Clone down the theme's repository (`git clone https://github.com/pages-themes/architect`)
+2. `cd` into the theme's directory
+3. Run `script/bootstrap` to install the necessary dependencies
+4. Run `bundle exec jekyll serve` to start the preview server
+5. Visit [`localhost:4000`](http://localhost:4000) in your browser to preview the theme
 
-When your theme is released, only the files in `_layouts`, `_includes`, `_sass` and `assets` tracked with Git will be bundled.
-To add a custom directory to your theme-gem, please edit the regexp in `mere-blog-theme.gemspec` accordingly.
+### Running tests
 
-## License
-
-The theme is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The theme contains a minimal test suite, to ensure a site with the theme would build successfully. To run the tests, simply run `script/cibuild`. You'll need to run `script/bootstrap` once before the test script will work.
