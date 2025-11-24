@@ -1,0 +1,1 @@
+Sitemap: http://localhost:4000/mere-blog-theme/sitemap.xml
